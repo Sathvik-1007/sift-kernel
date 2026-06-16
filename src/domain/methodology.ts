@@ -406,6 +406,24 @@ export class MethodologyTracker {
   /** Update the count of unresolved hypotheses — called by server after each finding registration */
   setOpenHypothesesCount(count: number): void { this.openHypothesesCount = count; }
 
+  /** Restore state from persisted data (session resume) */
+  restoreState(saved: { currentState: string; attemptedTools: string[]; failedTools: string[]; openHypothesesCount: number }): void {
+    this.currentState = saved.currentState as FSMState;
+    for (const t of saved.attemptedTools) this.executedTools.add(t);
+    for (const t of saved.failedTools) this.failedTools.add(t);
+    this.openHypothesesCount = saved.openHypothesesCount;
+  }
+
+  /** Export current state for persistence */
+  exportState(): { currentState: string; attemptedTools: string[]; failedTools: string[]; openHypothesesCount: number } {
+    return {
+      currentState: this.currentState,
+      attemptedTools: [...this.executedTools],
+      failedTools: [...this.failedTools],
+      openHypothesesCount: this.openHypothesesCount,
+    };
+  }
+
   constructor() {
     const map = new Map<ArtifactCategory, ToolCapabilitySpec[]>();
     for (const spec of TOOL_SPECS) {

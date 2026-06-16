@@ -50,6 +50,26 @@ Successfully processed during development (parser validation against real output
 | base-dmz-ftp-cdrive.E01 | DMZ FTP | Exfiltration staging |
 | *.img (memory dumps) | Memory captures | Running processes, network connections |
 
+### ROCBA — Standard Forensic Case (Physical Intrusion / IP Theft)
+
+A physical break-in scenario — insider threat with hands-on access:
+
+| Image | Role | Key Artifacts |
+|-------|------|---------------|
+| rocba-cdrive.e01 | Victim workstation (SRL-FORGE) | RDP brute-force (1471 4625 events), account creation, USB exfiltration |
+| Rocba-Memory.raw | Memory dump | Running processes, network connections |
+
+**Source:** SANS FOR508 training materials — "Standard Forensic Case" package.
+
+**Ground Truth** (`ground-truth/rocba-cdrive.json`):
+- T1110.003 — Mass brute-force/password spray (1471 failed logons, 458 usernames)
+- T1136.001 — Account creation + privilege escalation
+- T1052.001 — USB removable media exfiltration (8 devices)
+- T1200 — Physical access (break-in during owner vacation)
+- T1005 — Local data collection
+
+**Validated Results:** 4 confirmed findings, 0 false positives, 39 ledger entries (hash-chain verified).
+
 ### How to Use Case Data
 
 ```bash

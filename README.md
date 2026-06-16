@@ -37,7 +37,7 @@ Built for the [FIND EVIL! Hackathon](https://findevil.devpost.com/) by SANS Inst
 | 3 | README with setup instructions | [README.md](./README.md) — see "Quick Start" below | Done |
 | 4 | Live deployment URL or local run instructions | [README.md](./README.md) — see "Quick Start" below | Done (local) |
 | 5 | Text description of features/functionality | [README.md](./README.md) — see "What It Does" + "How It Works" below | Done |
-| 6 | Demo video (< 5 min, live terminal, audio, self-correction) | [docs/DEMO.md](./docs/DEMO.md) — script + link | Pending |
+| 6 | Demo video (< 5 min, live terminal, audio, self-correction) | [YouTube](https://youtu.be/zsT6p0PifTM) + [docs/DEMO.md](./docs/DEMO.md) | Done |
 | 7 | Architecture diagram | [docs/architecture.md](./docs/architecture.md) | Done |
 | 8 | Evidence dataset documentation | [docs/DATASET.md](./docs/DATASET.md) | Done |
 | 9 | Accuracy report | [docs/ACCURACY-REPORT.md](./docs/ACCURACY-REPORT.md) | Done |
@@ -109,7 +109,7 @@ SIFT Kernel sits between any AI agent (Claude, GPT, Llama, etc.) and the SANS SI
 ### Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/sift-kernel.git
+git clone https://github.com/Sathvik-1007/sift-kernel.git
 cd sift-kernel
 npm install
 ```
