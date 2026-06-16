@@ -1,0 +1,38 @@
+MFT Entry Header Values:
+Entry: 33542        Sequence: 2
+$LogFile Sequence Number: 42968458338
+Allocated Directory
+Links: 1
+
+$STANDARD_INFORMATION Attribute Values:
+Flags: 
+Owner ID: 0
+Security ID: 269  (S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464)
+Last User Journal Update Sequence Number: 2773732536
+Created:	2017-09-29 14:15:11.773873400 (IST)
+File Modified:	2021-09-16 08:31:59.182522400 (IST)
+MFT Modified:	2021-09-16 08:31:59.182522400 (IST)
+Accessed:	2021-09-16 08:31:59.182522400 (IST)
+
+$FILE_NAME Attribute Values:
+Flags: Directory
+Name: Windows
+Parent MFT Entry: 5 	Sequence: 5
+Allocated Size: 0   	Actual Size: 0
+Created:	2017-09-29 14:15:11.773873400 (IST)
+File Modified:	2018-05-05 03:40:26.803657800 (IST)
+MFT Modified:	2018-05-05 03:40:26.803657800 (IST)
+Accessed:	2018-05-05 03:40:26.803657800 (IST)
+
+$OBJECT_ID Attribute Values:
+Object Id: f2d1d650-ad3a-11e8-a905-a2c6c7001400
+
+Attributes: 
+Type: $STANDARD_INFORMATION (16-0)   Name: N/A   Resident   size: 72
+Type: $FILE_NAME (48-8)   Name: N/A   Resident   size: 80
+Type: $OBJECT_ID (64-9)   Name: N/A   Resident   size: 16
+Type: $INDEX_ROOT (144-6)   Name: $I30   Resident   size: 56
+Type: $INDEX_ALLOCATION (160-3)   Name: $I30   Non-Resident   size: 28672  init_size: 28672
+5333 5334 5335 5336 5337 5338 5339 
+Type: $BITMAP (176-4)   Name: $I30   Resident   size: 8
+Type: $LOGGED_UTILITY_STREAM (256-7)   Name: $TXF_DATA   Resident   size: 56

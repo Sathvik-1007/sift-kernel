@@ -1,0 +1,17 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+const t = new StdioClientTransport({command:"npx",args:["tsx","src/index.ts","--output","/tmp/sift-test","--fresh"]});
+const c = new Client({name:"t",version:"1.0.0"});
+await c.connect(t);
+await c.callTool({name:"mount_evidence",arguments:{image_path:"/home/sathvik/D/N/findevil/base-wkstn-01-c-drive.E01"}});
+await c.callTool({name:"verify_integrity",arguments:{algorithm:"sha256"}});
+const s = await c.callTool({name:"suggest_next_action",arguments:{}});
+const txt = (s.content as any)[0].text;
+const d = JSON.parse(txt);
+console.error("STATUS:", d.investigation_status);
+console.error("COVERAGE:", d.overall_coverage);
+console.error("SUGGESTION:", d.suggestion?.tool, d.suggestion?.operation);
+console.error("FSM:", d.fsm_state);
+console.error("HAS_DIRECTIVE:", !!d.suggestion?.directive);
+await c.close();
+process.exit(0);

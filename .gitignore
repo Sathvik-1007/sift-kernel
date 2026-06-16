@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+
+# Build output (rebuilt from source via `npm run build`)
+dist/
+
+# Temporary files
+/tmp/
+
+# SQLite databases (runtime state)
+*.db
+*.db-wal
+*.db-shm
+
+# Forensic evidence images (too large for git, download separately)
+*.E01
+*.E01.*
+*.raw
+*.img
+*.dd
+*.vmdk
+*.aff4
+*.pcap
+*.pcapng
+
+# Mount points
+/mnt/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+
+# Test coverage
+coverage/
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Archived test scripts (debugging artifacts)
+tests/_archived/
+
+# Runtime investigation output (regenerated per run)
+# sift-output/ is NOT ignored — judges need execution logs for three-claim trace
+
+# BUT keep committed example investigations for judges
+!examples/
+sift-output/

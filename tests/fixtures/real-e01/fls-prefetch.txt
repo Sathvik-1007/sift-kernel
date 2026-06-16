@@ -1,0 +1,10 @@
+d/d 21866-144-6:	Prefetch
+++ r/r 136731-128-4:	Windows.Networking.BackgroundTransfer.ContentPrefetchTask.dll.mui
++ r/r 82574-128-4:	Windows.Networking.BackgroundTransfer.ContentPrefetchTask.dll
+++ r/r 136731-128-4:	Windows.Networking.BackgroundTransfer.ContentPrefetchTask.dll.mui
++ d/d 44797-144-1:	amd64_microsoft-windows-networking-prefetching_31bf3856ad364e35_10.0.16299.15_none_a05298342394b318
+++ r/r 82574-128-4:	Windows.Networking.BackgroundTransfer.ContentPrefetchTask.dll
+++ r/r 71205-128-4:	$$_prefetch_readyboot_925024bb73d7b5a6.cdf-ms
+++ r/r 71204-128-4:	$$_prefetch_1688e4e8b2f89473.cdf-ms
+++ r/- * 0:	$$_prefetch_readyboot_925024bb73d7b5a6.cdf-ms
+++ r/r 94197-128-4:	amd64_microsoft-windows-networking-prefetching_31bf3856ad364e35_10.0.16299.15_none_a05298342394b318.manifest

@@ -1,0 +1,3 @@
++ d/d 38447-144-1:	winevt
+++ r/r 55814-128-4:	$$_system32_winevt_39519e6af36cf6a7.cdf-ms
+++ r/r 55816-128-4:	$$_system32_winevt_logs_2ccd04a261f738ce.cdf-ms

@@ -1,0 +1,40 @@
+{
+  "case_id": "SRL-2018-WKSTN-01",
+  "image": "base-wkstn-01-c-drive.E01",
+  "description": "Stark Research Labs workstation 01 — staging machine used in APT compromise by CRIMSON OSPREY",
+  "expected_verdict": "MALICE",
+  "iocs": [
+    { "type": "file", "value": "ProgramData/perfmon-k/perfmon-kr.exe", "description": "Malware masquerading as performance monitor", "inode": "148043", "mitre": "T1036.005" },
+    { "type": "file", "value": "ProgramData/perfmon-k/perfmon-kvw.exe", "description": "Companion malware in fake perfmon directory", "inode": "148040", "mitre": "T1036.005" },
+    { "type": "file", "value": "ProgramData/staging/7za.exe", "description": "7-Zip in attacker staging directory (data archiving for exfil)", "inode": "6251", "mitre": "T1560.001" },
+    { "type": "file", "value": "ProgramData/staging/install_wormhole/install_msadvapi2_32.exe", "description": "Malware installer masquerading as Windows DLL (advapi32)", "inode": "6446", "mitre": "T1036.005" },
+    { "type": "file", "value": "ProgramData/staging/install_wormhole/install_msadvapi2_64.exe", "description": "64-bit variant of msadvapi2 malware installer", "inode": "6402", "mitre": "T1036.005" },
+    { "type": "file", "value": "ProgramData/staging/llrange_lariat/Lariat-9.4.1-install.exe", "description": "138MB attacker tool installer (Lariat framework)", "inode": "123002", "mitre": "T1588.002" },
+    { "type": "directory", "value": "ProgramData/staging/", "description": "Attacker staging directory for tools and malware", "mitre": "T1074.001" },
+    { "type": "directory", "value": "ProgramData/perfmon-k/", "description": "Fake performance monitor directory containing malware", "mitre": "T1036.005" },
+    { "type": "account", "value": "administrator.shieldbase", "description": "Domain admin account used for lateral movement", "mitre": "T1078.002" },
+    { "type": "account", "value": "Administrator.BASE-WKSTN-01", "description": "Local admin account", "mitre": "T1078.003" },
+    { "type": "deleted_files", "value": "McAfee agent files with zeroed timestamps", "description": "AV disabled/removed — anti-forensics indicator", "mitre": "T1562.001" },
+    { "type": "anti_forensics", "value": "PowerShell%4Operational.evtx deleted", "description": "PowerShell execution log deleted — hides script-based attack evidence", "mitre": "T1070.001" },
+    { "type": "anti_forensics", "value": "TaskScheduler%4Operational.evtx deleted", "description": "Task Scheduler log deleted — hides persistence mechanism evidence", "mitre": "T1070.001" },
+    { "type": "anti_forensics", "value": "Security.evtx effectively cleared", "description": "Zero reconstructable logon/account events despite years of multi-user activity", "mitre": "T1070.001" },
+    { "type": "anti_forensics", "value": "16 securely deleted files", "description": "Files overwritten with zeros (not just unlinked) — active evidence destruction", "mitre": "T1070.004" },
+    { "type": "account", "value": "spsql (deleted)", "description": "SQL service account profile removed — anomalous cleanup suggesting attacker access", "mitre": "T1070" },
+    { "type": "insider_threat", "value": "Users/mhill/Documents/MH_Eyes_Only/", "description": "Classified corporate documents staged in private folder (wire transfers, board notes)", "mitre": "T1074.001" },
+    { "type": "insider_threat", "value": "SpiderFoot OSINT tool downloaded", "description": "Reconnaissance tool downloaded by user mhill (2018-08-08)", "mitre": "T1593" }
+  ],
+  "mitre_ttps": [
+    "T1036.005",
+    "T1560.001",
+    "T1074.001",
+    "T1078.002",
+    "T1078.003",
+    "T1562.001",
+    "T1588.002",
+    "T1070.001",
+    "T1070.004",
+    "T1070",
+    "T1593"
+  ],
+  "notes": "This workstation shows DUAL compromise indicators: (1) External APT (CRIMSON OSPREY) using staging dirs for malware + tools, with systematic anti-forensic log clearing. (2) Insider threat (mhill) staging corporate documents, downloading OSINT tools, and accessing classified materials. STUN.exe, msedge.exe masquerading, and pssdnsvc.exe are likely on other hosts (DC, RD servers) in the SRL-2018 case."
+}

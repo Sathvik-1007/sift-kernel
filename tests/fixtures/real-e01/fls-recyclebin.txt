@@ -1,0 +1,72 @@
+d/d 512-144-1:	S-1-5-18
++ r/r 123496-128-1:	desktop.ini
+d/d 200291-144-1:	S-1-5-21-3204118025-1178511089-2137043725-1001
++ r/r 200293-128-1:	desktop.ini
+d/d 114958-144-6:	S-1-5-21-3204118025-1178511089-2137043725-500
++ r/r 114959-128-1:	desktop.ini
+d/d 8018-144-1:	S-1-5-21-3225607321-4158839294-2596801906-500
++ r/r 8019-128-1:	desktop.ini
+d/d 12956-144-6:	S-1-5-21-3445421715-2530590580-3149308974-1118
++ r/r 104596-128-1:	$IYNGT99.jpg
++ r/r 61190-128-1:	$I01LM0O
++ r/r 104594-128-1:	$I3K4VEV.jpg
++ r/r 61029-128-1:	$I3KGPHK.pptx
++ r/r 61243-128-1:	$I3SA5L8.gif
++ r/r 108695-128-1:	$I6AWDFM.pdf
++ r/r 104593-128-1:	$IB8S952.jpg
++ r/r 104727-128-1:	$IBL5R8W.pdf
++ r/r 60979-128-1:	$IE77S5R.pdf
++ r/r 106125-128-1:	$IE9JKQD
++ r/r 61103-128-1:	$II07P2S.gif
++ r/r 106029-128-1:	$ILINBGY.pdf
++ r/r 61241-128-1:	$IN1PFVA.gif
++ r/r 61239-128-1:	$INY185Z.gif
++ r/r 61130-128-1:	$IS56W5B.pdf
++ r/r 106028-128-1:	$IS953IB.pdf
++ r/r 18924-128-1:	$IUKI49F.png
++ r/- * 0:	$IYNGT99.jpg
++ d/d 17265-144-6:	$R01LM0O
+++ r/- * 0:	Loki.gif
+++ r/r * 34809-128-3(realloc):	Loki.gif
++ r/r 31680-128-6:	$R3K4VEV.jpg
++ r/r 31680-128-9:	$R3K4VEV.jpg:Zone.Identifier
++ r/r 31828-128-4:	$R3KGPHK.pptx
++ r/r 32026-128-4:	$R3SA5L8.gif
++ r/r 30992-128-6:	$RB8S952.jpg
++ r/r 30992-128-9:	$RB8S952.jpg:Zone.Identifier
++ r/r 102341-128-5:	$RBL5R8W.pdf
++ r/r 102341-128-8:	$RBL5R8W.pdf:Zone.Identifier
++ r/r 60957-128-4:	$RE77S5R.pdf
++ d/d 78923-144-1:	$RE9JKQD
+++ r/r 79200-128-6:	chris-hemsworth-301.jpg
+++ r/r 79200-128-5:	chris-hemsworth-301.jpg:Zone.Identifier
+++ r/r 29442-128-6:	nike_gear.jpg
+++ r/r 29442-128-5:	nike_gear.jpg:Zone.Identifier
++ r/r 32024-128-4:	$RI07P2S.gif
++ r/r 101859-128-5:	$RLINBGY.pdf
++ r/r 101859-128-8:	$RLINBGY.pdf:Zone.Identifier
++ r/r 32032-128-4:	$RN1PFVA.gif
++ r/r 32025-128-4:	$RNY185Z.gif
++ r/r 18473-128-5:	$RS56W5B.pdf
++ r/r 18473-128-8:	$RS56W5B.pdf:Zone.Identifier
++ r/r 112263-128-5:	$RS953IB.pdf
++ r/r 112263-128-8:	$RS953IB.pdf:Zone.Identifier
++ r/r 25775-128-4:	$RUKI49F.png
++ r/r 25775-128-9:	$RUKI49F.png:Zone.Identifier
++ r/r 31977-128-4:	$RYNGT99.jpg
++ r/r 31977-128-9:	$RYNGT99.jpg:Zone.Identifier
++ r/r 12957-128-1:	desktop.ini
++ r/r 102722-128-5:	$R6AWDFM.pdf
++ r/r 102722-128-7:	$R6AWDFM.pdf:Zone.Identifier
+d/d 116237-144-1:	S-1-5-21-3445421715-2530590580-3149308974-1193
++ r/r 116238-128-1:	desktop.ini
+d/d 4583-144-1:	S-1-5-21-3445421715-2530590580-3149308974-500
++ r/r 4584-128-1:	desktop.ini
+d/d 101238-144-1:	S-1-5-21-4006758617-974418256-2448025512-1000
++ r/r 101239-128-1:	desktop.ini
+d/d 102528-144-1:	S-1-5-21-4006758617-974418256-2448025512-1001
++ r/r 102529-128-1:	desktop.ini
+d/d 101980-144-1:	S-1-5-21-42126767-2996440306-3211011523-1001
++ r/r 101983-128-1:	desktop.ini
+d/d 114616-144-1:	S-1-5-21-42126767-2996440306-3211011523-500
++ r/r 114617-128-1:	desktop.ini

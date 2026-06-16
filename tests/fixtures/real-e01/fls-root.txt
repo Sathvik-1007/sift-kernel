@@ -1,0 +1,32 @@
+d/d 100409-144-1:	Documents and Settings
+d/d 33329-144-6:	ProgramData
+d/d 33485-144-5:	Users
+r/r 4-128-4:	$AttrDef
+r/r 8-128-2:	$BadClus
+r/r 8-128-1:	$BadClus:$Bad
+r/r 6-128-4:	$Bitmap
+r/r 7-128-1:	$Boot
+d/d 11-144-4:	$Extend
+r/r 2-128-1:	$LogFile
+r/r 0-128-6:	$MFT
+r/r 1-128-1:	$MFTMirr
+d/d 57-144-5:	$Recycle.Bin
+r/r 9-144-17:	$Secure:$SDH
+r/r 9-144-16:	$Secure:$SII
+r/r 9-128-18:	$Secure:$SDS
+r/r 10-128-1:	$UpCase
+r/r 10-128-4:	$UpCase:$Info
+r/r 3-128-3:	$Volume
+r/r 21621-128-3:	bootmgr
+r/r 21617-128-1:	BOOTNXT
+d/d 31858-144-1:	MSOCache
+d/d 32098-144-1:	PerfLogs
+d/d 32100-144-6:	Program Files
+d/d 33227-144-6:	Program Files (x86)
+d/d 149085-144-7:	Quarantine
+d/d 31289-144-1:	Recovery
+r/r 345-128-1:	swapfile.sys
+d/d 58851-144-6:	System Volume Information
+d/d 33542-144-6:	Windows
+V/V 269824:	$OrphanFiles
+r/r 3410-128-5:	pagefile.sys

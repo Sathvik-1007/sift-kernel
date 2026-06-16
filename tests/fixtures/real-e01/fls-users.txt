@@ -1,0 +1,12 @@
+d/d 30642-144-6:	Administrator
+d/d 7190-144-6:	Administrator.BASE-WKSTN-01
+d/d 4144-144-6:	administrator.shieldbase
+d/d 164284-144-1:	All Users
+d/d 5646-144-6:	cbarton-a
+d/d 33486-144-5:	Default
+d/d 164070-144-1:	Default User
+r/r 58457-128-1:	desktop.ini
+d/d 12098-144-5:	mhill
+d/d 33534-144-5:	Public
+d/d 30131-144-5:	rsydow-a
+d/- * 0:	spsql
