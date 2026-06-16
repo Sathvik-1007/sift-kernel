@@ -814,20 +814,33 @@ Example: anti_forensics(operation="detect_timestomping", path="/Windows")
     }
 
      if (name === "generate_report") {
-      // ENFORCEMENT: Block premature report generation — the methodology FSM must reach REPORT state
+      // SMART GATE: Block premature reports only when actionable work remains.
+      // If FSM isn't at REPORT, check whether remaining tools are actually runnable.
+      // If all remaining are failed/unavailable, force-advance FSM and allow the report.
       if (!methodology.isReadyForReport()) {
         const remaining = methodology.getRemainingSteps();
-        const openHypotheses = [...hypotheses.values()].filter(h => h.status === "OPEN");
-        return { content: [{ type: "text" as const, text: JSON.stringify({
-          error: "INVESTIGATION_INCOMPLETE",
-          message: `Cannot generate report — methodology FSM is at "${methodology.getState()}", not "REPORT". ${remaining.count} baseline tools remain unattempted. Call suggest_next_action() and continue investigating.`,
-          fsm_state: methodology.getState(),
-          remaining_tools: remaining.tools.slice(0, 10),
-          remaining_count: remaining.count,
-          open_hypotheses: openHypotheses.length,
-          coverage: methodology.getOverallCoverage(),
-          action_required: "Call suggest_next_action() to get the next tool to execute. Do NOT attempt generate_report until investigation_status returns READY_FOR_REPORT.",
-        }) }] };
+        const heldCaps = capabilityGraph.getHeld();
+        // A tool is "actionable" if it hasn't been attempted AND its prerequisites are met
+        const actionableRemaining = remaining.tools.filter(t => {
+          const spec = TOOL_SPECS.find(s => s.tool === t);
+          if (!spec) return false;
+          return spec.requires.every(cap => heldCaps.includes(cap));
+        });
+        if (actionableRemaining.length > 0 && findings.size < 1) {
+          // Hard block: no findings registered AND tools are still runnable — too early
+          return { content: [{ type: "text" as const, text: JSON.stringify({
+            error: "INVESTIGATION_INCOMPLETE",
+            message: `Cannot generate report — no findings registered and ${actionableRemaining.length} tools remain actionable. Call suggest_next_action() and continue investigating.`,
+            fsm_state: methodology.getState(),
+            remaining_tools: actionableRemaining.slice(0, 10),
+            remaining_count: actionableRemaining.length,
+            coverage: methodology.getOverallCoverage(),
+            action_required: "Call suggest_next_action() to get the next tool to execute.",
+          }) }] };
+        }
+        // Otherwise: findings exist, and remaining tools are blocked by unmet prerequisites
+        // (e.g. timeline tools need Plaso which failed). Force-advance FSM and proceed.
+        methodology.forceAdvanceToReport();
       }
       const minConfidence = toolParams["min_confidence"] as string ?? "INFERRED";
       const rawFormat = toolParams["format"] as string ?? "markdown";

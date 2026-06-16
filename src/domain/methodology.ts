@@ -773,6 +773,11 @@ export class MethodologyTracker {
     return this.currentState === "REPORT";
   }
 
+  /** Force FSM to REPORT when remaining tools are environmentally blocked (not actionable). */
+  forceAdvanceToReport(): void {
+    this.currentState = "REPORT";
+  }
+
   /** Alternative stop criterion using Rough Set boundary (H1 wire-in) */
   /** Get count and names of baseline tools not yet attempted */
   getRemainingSteps(): { count: number; tools: readonly string[] } {
