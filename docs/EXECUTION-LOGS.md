@@ -59,18 +59,18 @@ export_audit_log(format="json")
 sqlite3 sift-output/ledger.db
 
 # Count entries
-SELECT COUNT(*) FROM ledger_entries;
+SELECT COUNT(*) FROM ledger;
 
 # View last 10 tool calls
-SELECT tool, params, success, timestamp FROM ledger_entries ORDER BY timestamp DESC LIMIT 10;
+SELECT tool, params, success, timestamp FROM ledger ORDER BY timestamp DESC LIMIT 10;
 
 # Trace a finding's provenance
-SELECT * FROM ledger_entries WHERE id IN (
+SELECT * FROM ledger WHERE id IN (
   SELECT json_each.value FROM findings, json_each(findings.evidence_ids) WHERE findings.id = 'finding-xyz'
 );
 
 # Verify hash chain manually
-SELECT id, prevHash FROM ledger_entries ORDER BY timestamp;
+SELECT id, prevHash FROM ledger ORDER BY timestamp;
 ```
 
 ## Provenance Tracing
@@ -166,3 +166,45 @@ sift-kernel_reporting(operation="export_audit_log", format="json")
 # CSV for spreadsheet analysis
 sift-kernel_reporting(operation="export_audit_log", format="csv")
 ```
+
+## Real Investigation Samples
+
+### Sample: rocba-cdrive.e01 — First Two Ledger Entries
+
+From `sift-output/ledger.db` (39 total entries in full run):
+
+```
+Entry 1:
+  id: cqsvScn5hq8YZow353XP9
+  tool: mount_evidence
+  params: {"image_path":"/path/to/rocba-cdrive.e01","format":"e01"}
+  outputHash: 925efa79f512a6fe4acb3f4f6973f2ac8687c90aa5322a58289e8ded21d25398
+  timestamp: 2026-06-16T03:29:12.278Z
+  prevHash: 901131d838b17aac0f7885b81e03cbdc9f5157a00343d30ab22083685ed1416a
+  capabilities_granted: [evidence_mounted]
+  success: true
+
+Entry 2:
+  id: 2gGzIVD0Bocr6OsKAu__-
+  tool: verify_integrity
+  params: {"algorithm":"sha256"}
+  outputHash: d184c4eebb17d8333b7e36475f78a45c858756d869933c6f9ee79238883a402c
+  timestamp: 2026-06-16T03:30:01.336Z
+  prevHash: 70ab635faa498b3d4ba65c11fbf60bbe463e4f6eb1247085ba363e50627c882c
+  capabilities_granted: [evidence_mounted, integrity_verified]
+  success: true
+  durationMs: 45022
+```
+
+### Sample: base-wkstn-01-c-drive.E01 — Full Run Stats
+
+| Metric | Value |
+|--------|-------|
+| Total ledger entries | 57 |
+| Successful tool calls | 49 |
+| Failed tool calls | 8 (environment — missing binaries) |
+| Findings registered | 4 |
+| Hypotheses registered | 2 |
+| Chain integrity | VALID |
+| Total execution time | ~12 minutes |
+| Report format | Interactive HTML (HMAC-sealed) |
