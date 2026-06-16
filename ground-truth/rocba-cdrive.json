@@ -1,0 +1,52 @@
+{
+  "case_id": "ROCBA-2020-FOR500",
+  "image": "rocba-cdrive.e01",
+  "description": "Fred Rocba home workstation — physical break-in and IP theft from Stark Research Labs employee system (FOR500 case)",
+  "expected_verdict": "MALICE",
+  "scenario": "Physical intrusion at employee home during vacation. Attacker accessed SRL laptop left logged in. Goal: steal research IP. Break-in date: 2020-11-13 evening EST.",
+  "key_dates": {
+    "hire_date": "2020-10-24",
+    "work_start": "2020-10-26",
+    "vacation_start": "2020-11-10",
+    "break_in": "2020-11-13",
+    "timezone": "EST5EDT"
+  },
+  "system_info": {
+    "os": "Windows 10 (fully patched)",
+    "user": "Fred Rocba",
+    "email_work": "frocba@stark-research-labs.com",
+    "email_personal": ["fred.rocba@gmail.com", "fred.rocba@outlook.com"],
+    "browsers": ["Edge", "Firefox", "Chrome"],
+    "cloud_services": ["Office365", "Dropbox", "OneDrive", "Google Drive", "iCloud"],
+    "access_method": "RDP + cloud SaaS"
+  },
+  "iocs": [
+    { "type": "activity_window", "value": "2020-11-13 evening to discovery", "description": "Unauthorized access window while Fred was in Disney World", "mitre": "T1078.001" },
+    { "type": "physical_access", "value": "Forced entry at Rocba residence", "description": "Door forced open — targeted physical intrusion focused on SRL laptop", "mitre": "T1200" },
+    { "type": "data_theft", "value": "SRL project files accessed/exfiltrated", "description": "Key projects Fred had access to were targeted — need to determine what was stolen", "mitre": "T1005" },
+    { "type": "data_exfiltration", "value": "Files transferred to unknown destination", "description": "Attacker moved data off system — method and destination unknown", "mitre": "T1048" },
+    { "type": "account_misuse", "value": "Fred Rocba's logged-in session", "description": "Attacker used Fred's active session — system was left logged in during vacation", "mitre": "T1078.001" },
+    { "type": "file_access", "value": "SRL research documents", "description": "Accessed corporate IP — biotech, metals research, advanced alloy R&D", "mitre": "T1213" },
+    { "type": "usb_activity", "value": "Potential USB device for exfiltration", "description": "Check for USB insertion events during break-in window (2020-11-13 evening)", "mitre": "T1052.001" },
+    { "type": "browser_activity", "value": "Web-based exfiltration or tool download", "description": "Check browser history for cloud upload, file sharing, or tool downloads during attack window", "mitre": "T1567" },
+    { "type": "rdp_session", "value": "Remote desktop connections", "description": "Fred used RDP for work — check if attacker also leveraged existing RDP sessions or created new ones", "mitre": "T1021.001" }
+  ],
+  "mitre_ttps": [
+    "T1200",
+    "T1078.001",
+    "T1005",
+    "T1048",
+    "T1052.001",
+    "T1213",
+    "T1567",
+    "T1021.001"
+  ],
+  "investigation_questions": [
+    "What key projects did Fred Rocba have access to?",
+    "What was stolen from the system?",
+    "Where was the data transferred to?",
+    "How was the data stolen (USB, cloud, network)?",
+    "When exactly did the unauthorized activity occur?"
+  ],
+  "notes": "This is a FOR500 (Windows Forensic Analysis) training case. The scenario focuses on physical break-in IP theft, NOT remote APT compromise. Key evidence: file access timestamps during 2020-11-13 evening, USB device insertions, cloud sync activity, browser downloads, shellbags showing folder navigation, recent docs, and jump lists. Memory image (Rocba-Memory.raw) available for volatile artifact analysis."
+}

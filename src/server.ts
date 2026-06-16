@@ -1463,15 +1463,23 @@ ${(() => {
     const gtFiles = fs.readdirSync(gtDir).filter((f: string) => f.endsWith(".json"));
     if (gtFiles.length === 0) return "";
     const imageName = investigationState.imagePath ? path.basename(investigationState.imagePath).replace(/\.[^.]+$/, "") : "";
-    const gtFile = gtFiles.find((f: string) => imageName.toLowerCase().includes(f.replace(".json", "").toLowerCase().replace(/-/g, ""))) ?? gtFiles[0];
+    const norm = (s: string) => s.toLowerCase().replace(/[-_\s]/g, "");
+    const gtFile = gtFiles.find((f: string) => norm(imageName).includes(norm(f.replace(".json", "")))) ?? gtFiles[0];
     const gt = JSON.parse(fs.readFileSync(path.join(gtDir, gtFile!), "utf-8"));
     const gtIocs: { type: string; value: string; description: string; mitre?: string }[] = gt.iocs ?? [];
     const gtTtps: string[] = gt.mitre_ttps ?? [];
     const foundMitres = new Set(reportFindings.map(f => f.mitreTechnique).filter((t): t is string => !!t));
-    const foundDescriptions = reportFindings.map((f: { description: string }) => f.description.toLowerCase()).join(" ");
+    const allFindingText = reportFindings.map((f) =>
+      f.description.toLowerCase() + " " + (f.iocs ?? []).map((i: {type:string;value:string}) => i.value.toLowerCase()).join(" ")
+    ).join(" ");
     const detectedIocs = gtIocs.filter(ioc => {
       const val = ioc.value.toLowerCase().replace(/[\\/]/g, "/");
-      return foundDescriptions.includes(val.split("/").pop()!) || foundDescriptions.includes(val);
+      const parts = val.split("/").filter(Boolean);
+      const lastPart = parts[parts.length - 1] ?? "";
+      if (allFindingText.includes(val)) return true;
+      if (lastPart.length > 3 && allFindingText.includes(lastPart)) return true;
+      if (ioc.mitre && foundMitres.has(ioc.mitre)) return true;
+      return false;
     });
     const detectedTtps = gtTtps.filter(t => foundMitres.has(t));
     const iocRate = gtIocs.length > 0 ? Math.round((detectedIocs.length / gtIocs.length) * 100) : 0;
@@ -1490,7 +1498,9 @@ ${(() => {
     <tr><th style="text-align:left;border-bottom:1px solid var(--border)">IOC</th><th>MITRE</th><th>Detected</th></tr>
     ${gtIocs.map(ioc => {
       const val = ioc.value.toLowerCase().replace(/[\\/]/g, "/");
-      const detected = foundDescriptions.includes(val.split("/").pop()!) || foundDescriptions.includes(val);
+      const parts = val.split("/").filter(Boolean);
+      const lastPart = parts[parts.length - 1] ?? "";
+      const detected = allFindingText.includes(val) || (lastPart.length > 3 && allFindingText.includes(lastPart)) || (ioc.mitre != null && foundMitres.has(ioc.mitre));
       return `<tr><td style="border-bottom:1px solid var(--border)">${escapeHtml(ioc.value)}</td><td>${escapeHtml(ioc.mitre ?? "")}</td><td style="color:${detected ? "var(--green)" : "var(--red)"}">${detected ? "YES" : "NO"}</td></tr>`;
     }).join("")}
   </table>
