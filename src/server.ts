@@ -810,6 +810,21 @@ Example: anti_forensics(operation="detect_timestomping", path="/Windows")
     }
 
      if (name === "generate_report") {
+      // ENFORCEMENT: Block premature report generation — the methodology FSM must reach REPORT state
+      if (!methodology.isReadyForReport()) {
+        const remaining = methodology.getRemainingSteps();
+        const openHypotheses = [...hypotheses.values()].filter(h => h.status === "OPEN");
+        return { content: [{ type: "text" as const, text: JSON.stringify({
+          error: "INVESTIGATION_INCOMPLETE",
+          message: `Cannot generate report — methodology FSM is at "${methodology.getState()}", not "REPORT". ${remaining.count} baseline tools remain unattempted. Call suggest_next_action() and continue investigating.`,
+          fsm_state: methodology.getState(),
+          remaining_tools: remaining.tools.slice(0, 10),
+          remaining_count: remaining.count,
+          open_hypotheses: openHypotheses.length,
+          coverage: methodology.getOverallCoverage(),
+          action_required: "Call suggest_next_action() to get the next tool to execute. Do NOT attempt generate_report until investigation_status returns READY_FOR_REPORT.",
+        }) }] };
+      }
       const minConfidence = toolParams["min_confidence"] as string ?? "INFERRED";
       const rawFormat = toolParams["format"] as string ?? "markdown";
       const format = rawFormat === "narrative" ? "markdown" : rawFormat; // backward compat
