@@ -1456,6 +1456,55 @@ ${(() => {
   </div>
 </div>
 
+${(() => {
+  // Ground-truth comparison — load if available
+  try {
+    const gtDir = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "ground-truth");
+    const gtFiles = fs.readdirSync(gtDir).filter((f: string) => f.endsWith(".json"));
+    if (gtFiles.length === 0) return "";
+    const imageName = investigationState.imagePath ? path.basename(investigationState.imagePath).replace(/\.[^.]+$/, "") : "";
+    const gtFile = gtFiles.find((f: string) => imageName.toLowerCase().includes(f.replace(".json", "").toLowerCase().replace(/-/g, ""))) ?? gtFiles[0];
+    const gt = JSON.parse(fs.readFileSync(path.join(gtDir, gtFile!), "utf-8"));
+    const gtIocs: { type: string; value: string; description: string; mitre?: string }[] = gt.iocs ?? [];
+    const gtTtps: string[] = gt.mitre_ttps ?? [];
+    const foundMitres = new Set(reportFindings.map(f => f.mitreTechnique).filter((t): t is string => !!t));
+    const foundDescriptions = reportFindings.map((f: { description: string }) => f.description.toLowerCase()).join(" ");
+    const detectedIocs = gtIocs.filter(ioc => {
+      const val = ioc.value.toLowerCase().replace(/[\\/]/g, "/");
+      return foundDescriptions.includes(val.split("/").pop()!) || foundDescriptions.includes(val);
+    });
+    const detectedTtps = gtTtps.filter(t => foundMitres.has(t));
+    const iocRate = gtIocs.length > 0 ? Math.round((detectedIocs.length / gtIocs.length) * 100) : 0;
+    const ttpRate = gtTtps.length > 0 ? Math.round((detectedTtps.length / gtTtps.length) * 100) : 0;
+    return `<div class="card">
+  <h2><span class="icon">&#127919;</span> Ground Truth Accuracy</h2>
+  <p style="font-size:0.85rem;color:var(--muted)">Compared against: <code>${escapeHtml(gtFile!)}</code> (${gt.case_id ?? "unknown case"})</p>
+  <div class="audit-grid">
+    <div class="audit-item"><div class="label">IOC Detection</div><div class="value">${detectedIocs.length}/${gtIocs.length} (${iocRate}%)</div></div>
+    <div class="audit-item"><div class="label">TTP Coverage</div><div class="value">${detectedTtps.length}/${gtTtps.length} (${ttpRate}%)</div></div>
+    <div class="audit-item"><div class="label">False Positives</div><div class="value">${reportFindings.length - detectedIocs.length > 0 ? reportFindings.length - detectedIocs.length + " (unconfirmed)" : "0"}</div></div>
+    <div class="audit-item"><div class="label">Expected Verdict</div><div class="value">${escapeHtml(gt.expected_verdict ?? "N/A")}</div></div>
+  </div>
+  <details style="margin-top:1rem"><summary style="cursor:pointer;font-weight:600">IOC Breakdown</summary>
+  <table style="width:100%;font-size:0.8rem;margin-top:0.5rem;border-collapse:collapse">
+    <tr><th style="text-align:left;border-bottom:1px solid var(--border)">IOC</th><th>MITRE</th><th>Detected</th></tr>
+    ${gtIocs.map(ioc => {
+      const val = ioc.value.toLowerCase().replace(/[\\/]/g, "/");
+      const detected = foundDescriptions.includes(val.split("/").pop()!) || foundDescriptions.includes(val);
+      return `<tr><td style="border-bottom:1px solid var(--border)">${escapeHtml(ioc.value)}</td><td>${escapeHtml(ioc.mitre ?? "")}</td><td style="color:${detected ? "var(--green)" : "var(--red)"}">${detected ? "YES" : "NO"}</td></tr>`;
+    }).join("")}
+  </table>
+  </details>
+  <details style="margin-top:0.5rem"><summary style="cursor:pointer;font-weight:600">TTP Breakdown</summary>
+  <table style="width:100%;font-size:0.8rem;margin-top:0.5rem;border-collapse:collapse">
+    <tr><th style="text-align:left;border-bottom:1px solid var(--border)">Technique</th><th>Detected</th></tr>
+    ${gtTtps.map(t => `<tr><td style="border-bottom:1px solid var(--border)">${escapeHtml(t)}</td><td style="color:${foundMitres.has(t) ? "var(--green)" : "var(--red)"}">${foundMitres.has(t) ? "YES" : "NO"}</td></tr>`).join("")}
+  </table>
+  </details>
+</div>`;
+  } catch { return ""; }
+})()}
+
 <footer>
   SIFT Kernel — Forensic Evidence Operating System | Zero Trust Architecture | Hash-Chained Provenance
 </footer>
