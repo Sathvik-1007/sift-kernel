@@ -774,18 +774,22 @@ Example: anti_forensics(operation="detect_timestomping", path="/Windows")
         }
       }
       for (const hid of contradictsHyps) {
-        const h = hypotheses.get(hid);
-        if (h) {
-          hypotheses.set(hid, updateHypothesis(h, { type: "contradict", findingId: finding.id }));
-        }
-      }
+         const h = hypotheses.get(hid);
+         if (h) {
+           hypotheses.set(hid, updateHypothesis(h, { type: "contradict", findingId: finding.id }));
+         }
+       }
 
-      return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, finding_id: finding.id, confidence: finding.confidence, verification: verificationStatus, provenance_snippets: provenanceSnippets, message: `Finding registered with confidence: ${finding.confidence}. Evidence verification: ${verificationStatus}` }) }] };
+       // Update methodology's view of open hypotheses for CORRELATE→REPORT gating
+       methodology.setOpenHypothesesCount([...hypotheses.values()].filter(h => h.status === "OPEN").length);
+
+       return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, finding_id: finding.id, confidence: finding.confidence, verification: verificationStatus, provenance_snippets: provenanceSnippets, message: `Finding registered with confidence: ${finding.confidence}. Evidence verification: ${verificationStatus}` }) }] };
     }
 
     if (name === "register_hypothesis") {
       const hyp = createHypothesis({ description: toolParams["description"] as string });
       hypotheses.set(hyp.id as string, hyp);
+      methodology.setOpenHypothesesCount([...hypotheses.values()].filter(h => h.status === "OPEN").length);
       return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, hypothesis_id: hyp.id }) }] };
     }
 
@@ -2302,12 +2306,21 @@ WORKFLOW:
 6. Repeat until investigation_status says READY_FOR_REPORT (the methodology FSM has completed all phases)
 7. Call generate_report(format="html") ONLY when investigation_status = READY_FOR_REPORT
 
+CRITICAL — DO NOT STOP EARLY:
+- generate_report() will REJECT your call if the FSM has not reached REPORT state
+- If a tool fails, call suggest_next_action() — it skips failed tools and suggests the next one
+- Tool failures are EXPECTED (dirty hives, missing binaries) — they do NOT mean "stop investigating"
+- The FSM tracks what succeeded AND what failed — it only advances when ALL tools are attempted
+- You must keep calling suggest_next_action() until investigation_status = "READY_FOR_REPORT"
+- There is no shortcut. The loop IS the investigation.
+
 RULES:
 - Every finding MUST link to ledger_entry_ids from prior tool calls
 - Use register_hypothesis() to propose investigation directions
 - Use corroborate_finding() to strengthen weak findings
 - Use get_contradictions() to identify conflicts before reporting
 - NEVER claim something without tool evidence backing it
+- When suggest_next_action tells you to call get_hypothesis_status, DO IT — unresolved hypotheses block report generation
 
 The server guides your methodology. Trust suggest_next_action(). It knows what you've checked and what's missing.`;
 

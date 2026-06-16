@@ -401,6 +401,10 @@ export class MethodologyTracker {
   private currentState: FSMState = "COLLECTION";
   private readonly specsByCategory: ReadonlyMap<ArtifactCategory, readonly ToolCapabilitySpec[]>;
   private evidenceType: "disk-windows" | "disk-linux" | "disk-macos" | "memory" | "pcap" | "unknown" = "unknown";
+  private openHypothesesCount = 0;
+
+  /** Update the count of unresolved hypotheses — called by server after each finding registration */
+  setOpenHypothesesCount(count: number): void { this.openHypothesesCount = count; }
 
   constructor() {
     const map = new Map<ArtifactCategory, ToolCapabilitySpec[]>();
@@ -517,7 +521,12 @@ export class MethodologyTracker {
         const corrTools = ["build_attack_narrative", "map_mitre_techniques"];
         const anyActionablePending = corrTools.some(t =>
           !this.executedTools.has(t) && !this.failedTools.has(t) && this.capsHeld(t, heldSet));
-        if (!anyActionablePending) {
+        // Gate: don't advance to REPORT if hypotheses remain unresolved AND
+        // corroboration tools haven't been attempted. This encourages the agent
+        // to call get_hypothesis_status / corroborate_finding before wrapping up.
+        const hypothesesBlocking = this.openHypothesesCount > 0 &&
+          !this.executedTools.has("get_hypothesis_status") && !this.failedTools.has("get_hypothesis_status");
+        if (!anyActionablePending && !hypothesesBlocking) {
           this.currentState = "REPORT";
         }
         break;
@@ -619,6 +628,10 @@ export class MethodologyTracker {
             ? "Synthesize registered findings into a coherent attack narrative"
             : "Map findings to MITRE ATT&CK framework";
           return this.mkSuggestion(tool, reason, tool === "build_attack_narrative" ? "HIGH" : "MEDIUM", "Correlation & Synthesis");
+        }
+        // Hypothesis resolution gate: if hypotheses remain OPEN, suggest reviewing them
+        if (this.openHypothesesCount > 0 && !this.executedTools.has("get_hypothesis_status") && !this.failedTools.has("get_hypothesis_status")) {
+          return this.mkSuggestion("get_hypothesis_status", `${this.openHypothesesCount} hypotheses remain unresolved — review their evidence status before reporting`, "HIGH", "Hypothesis Resolution");
         }
         this.currentState = "REPORT";
         return this.suggestNextAction(heldCapabilities);
